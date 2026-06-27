@@ -1,11 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\LibroController;
-use App\Http\Controllers\Api\AutorController;
 
-Route::get('/libros', [LibroController::class, 'index']);
-Route::post('/libros', [LibroController::class, 'store']);
+use App\Http\Controllers\AutorController;
+use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\EditorialController;
+use App\Http\Controllers\LibroController;
+use App\Http\Controllers\PrestamoController;
 
-Route::get('/autores', [AutorController::class, 'index']);
-Route::post('/autores', [AutorController::class, 'store']);
+Route::apiResource('autores', AutorController::class);
+Route::apiResource('categorias', CategoriaController::class);
+Route::apiResource('editoriales', EditorialController::class);
+Route::apiResource('libros', LibroController::class);
+Route::apiResource('prestamos', PrestamoController::class);
