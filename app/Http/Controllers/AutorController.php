@@ -9,24 +9,56 @@ class AutorController extends Controller
 {
     public function index()
     {
-        return Autor::all();
+        $autores = Autor::with('libros')->get();
+
+        return response()->json([
+            'mensaje' => 'Lista de autores obtenida correctamente',
+            'datos' => $autores
+        ], 200);
     }
 
     public function store(Request $request)
     {
-        return Autor::create($request->all());
+        $datos = $request->validate([
+            'nombre' => 'required|string|max:255',
+            'apellido' => 'required|string|max:255',
+            'nacionalidad' => 'required|string|max:255',
+            'fecha_nacimiento' => 'nullable|date',
+        ]);
+
+        $autor = Autor::create($datos);
+
+        return response()->json([
+            'mensaje' => 'Autor creado correctamente',
+            'datos' => $autor
+        ], 201);
     }
 
     public function show(Autor $autor)
     {
-        return $autor;
+        $autor->load('libros');
+
+        return response()->json([
+            'mensaje' => 'Autor encontrado correctamente',
+            'datos' => $autor
+        ], 200);
     }
 
     public function update(Request $request, Autor $autor)
     {
-        $autor->update($request->all());
+        $datos = $request->validate([
+            'nombre' => 'sometimes|required|string|max:255',
+            'apellido' => 'sometimes|required|string|max:255',
+            'nacionalidad' => 'sometimes|required|string|max:255',
+            'fecha_nacimiento' => 'sometimes|nullable|date',
+        ]);
 
-        return $autor;
+        $autor->update($datos);
+
+        return response()->json([
+            'mensaje' => 'Autor actualizado correctamente',
+            'datos' => $autor
+        ], 200);
     }
 
     public function destroy(Autor $autor)
@@ -35,6 +67,6 @@ class AutorController extends Controller
 
         return response()->json([
             'mensaje' => 'Autor eliminado correctamente'
-        ]);
+        ], 200);
     }
 }
